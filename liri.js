@@ -9,11 +9,15 @@ let userInput = process.argv[3];
 
 switch(command) {
     case "spotify-this-song":
-    spotifyThisSong();
+    spotifyThis();
+    break;
+
+    case "concert-this":
+    concertThis();
     break;
 }
 
-function spotifyThisSong() {
+function spotifyThis() {
     var spotify = new Spotify(keys.spotify);
     spotify.search ({ type: "track", query: userInput, limit: 1 }, function (err, data) {
         
@@ -33,4 +37,19 @@ function spotifyThisSong() {
         }
 
     });
+}
+
+function concertThis() {
+    var concertQuery = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp"
+
+    request(concertQuery, function(err, response, body) {
+        if (err) {
+            console.log("Error occurred");
+        } else {
+            console.log(JSON.parse(body));
+            console.log("Venue: " + body.venue);
+            // console.log("Location: " + body.city);
+            // console.log("Date: " + body.datetime);
+        }
+    })
 }
