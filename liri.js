@@ -15,6 +15,10 @@ switch(command) {
     case "concert-this":
     concertThis();
     break;
+
+    case "movie-this":
+    movieThis();
+    break
 }
 
 function spotifyThis() {
@@ -23,11 +27,9 @@ function spotifyThis() {
         
         if (err) {
             console.log("Error occured");
-        }
-        else if (!userInput) {
+        } else if (!userInput) {
             userInput = "All Star";
-        }
-        else {
+        } else {
             let songInfo = data.tracks.items[0];
             console.log("Song: " + songInfo.name);
             console.log("Artist: " + songInfo.album.artists[0].name);
@@ -50,6 +52,26 @@ function concertThis() {
             console.log("Venue: " + body.venue);
             // console.log("Location: " + body.city);
             // console.log("Date: " + body.datetime);
+        }
+    })
+}
+
+function movieThis() {
+    var omdb = "http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy"
+
+    request(omdb, function(err, response, body){
+        if (err) {
+            console.log("Error occurred");
+        } else {
+            let movieInfo = (JSON.parse(body));
+            console.log("Title: " + movieInfo.Title);
+            console.log("Release Year: " + movieInfo.Year);
+            console.log("IMDB Rating: " + movieInfo.imdbRating);
+            console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value);
+            console.log("Produced In: " + movieInfo.Country);
+            console.log("Languages: " + movieInfo.Language);
+            console.log("Plot: " + movieInfo.Plot);
+            console.log("Actors: " + movieInfo.Actors);
         }
     })
 }
