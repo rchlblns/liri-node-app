@@ -50,16 +50,15 @@ function spotifyThis() {
 function concertThis() {
     var concertQuery = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp"
 
-    request(concertQuery, {
-        json:true}, 
-        function(err, response, body) {
+    request(concertQuery, function(err, response, body) {
         if (err) {
             console.log("Error occurred");
         } else {
-            let concertInfo = (JSON.parse(body));
-            console.log("Venue: " + concertInfo.venue.name);
-            // console.log("Location: " + body.city);
-            // console.log("Date: " + body.datetime);
+            let concertInfo = JSON.parse(body);
+            // console.log(concertInfo);
+            console.log("Venue: " + concertInfo[0].venue.name);
+            console.log("Location: " + concertInfo[0].venue.city);
+            console.log("Date: " + concertInfo[0].datetime);
         }
     })
 }
@@ -75,7 +74,7 @@ function movieThis() {
         if (err) {
             console.log("Error occurred");
         } else {
-            let movieInfo = (JSON.parse(body));
+            let movieInfo = JSON.parse(body);
             console.log("Title: " + movieInfo.Title);
             console.log("Release Year: " + movieInfo.Year);
             console.log("IMDB Rating: " + movieInfo.imdbRating);
