@@ -19,37 +19,45 @@ switch(command) {
     case "movie-this":
     movieThis();
     break
+
+    case "do-what-it-says":
+    require()
+    break;
 }
 
 function spotifyThis() {
+
+    if (userInput === undefined) {
+        userInput = "Promises";
+    }
+
     var spotify = new Spotify(keys.spotify);
     spotify.search ({ type: "track", query: userInput, limit: 1 }, function (err, data) {
         
         if (err) {
             console.log("Error occured");
-        } else if (!userInput) {
-            userInput = "All Star";
-        } else {
+        
+        }else{
             let songInfo = data.tracks.items[0];
             console.log("Song: " + songInfo.name);
             console.log("Artist: " + songInfo.album.artists[0].name);
             console.log("Album: " +songInfo.album.name);
             console.log("Preview song here: " + songInfo.album.external_urls.spotify);
-
         }
-
     });
 }
 
 function concertThis() {
     var concertQuery = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp"
 
-    request(concertQuery, function(err, response, body) {
+    request(concertQuery, {
+        json:true}, 
+        function(err, response, body) {
         if (err) {
             console.log("Error occurred");
         } else {
-            console.log(JSON.parse(body));
-            console.log("Venue: " + body.venue);
+            let concertInfo = (JSON.parse(body));
+            console.log("Venue: " + concertInfo.venue.name);
             // console.log("Location: " + body.city);
             // console.log("Date: " + body.datetime);
         }
@@ -62,7 +70,10 @@ function movieThis() {
     request(omdb, function(err, response, body){
         if (err) {
             console.log("Error occurred");
-        } else {
+        } else if (userInput === undefined) {
+            userInput = "Inception";
+        }
+        else {
             let movieInfo = (JSON.parse(body));
             console.log("Title: " + movieInfo.Title);
             console.log("Release Year: " + movieInfo.Year);
