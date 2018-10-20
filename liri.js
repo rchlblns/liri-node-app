@@ -28,7 +28,7 @@ switch(command) {
 function spotifyThis() {
 
     if (userInput === undefined) {
-        userInput = "Promises";
+        userInput = "Better Give U Up";
     }
 
     var spotify = new Spotify(keys.spotify);
@@ -65,15 +65,16 @@ function concertThis() {
 }
 
 function movieThis() {
+
+    if (userInput === undefined) {
+        userInput = "Back To The Future";
+    }
     var omdb = "http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy"
 
     request(omdb, function(err, response, body){
         if (err) {
             console.log("Error occurred");
-        } else if (userInput === undefined) {
-            userInput = "Inception";
-        }
-        else {
+        } else {
             let movieInfo = (JSON.parse(body));
             console.log("Title: " + movieInfo.Title);
             console.log("Release Year: " + movieInfo.Year);
