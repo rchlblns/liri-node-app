@@ -3,6 +3,7 @@ let keys = require("./keys.js");
 let request = require("request")
 let Spotify = require("node-spotify-api");
 let fs = require("fs");
+let moment = require("moment");
 
 let command = process.argv[2];
 let userInput = process.argv[3];
@@ -21,13 +22,13 @@ switch(command) {
     break
 
     case "do-what-it-says":
-    require()
+    justDoIt();
     break;
 }
 
 function spotifyThis() {
 
-    if (userInput === undefined) {
+    if ( userInput === undefined) {
         userInput = "Better Give U Up";
     }
 
@@ -37,12 +38,14 @@ function spotifyThis() {
         if (err) {
             console.log("Error occured");
         
-        }else{
+        } else {
             let songInfo = data.tracks.items[0];
+            console.log("===== Ok! This is what I found. =====");
             console.log("Song: " + songInfo.name);
             console.log("Artist: " + songInfo.album.artists[0].name);
             console.log("Album: " +songInfo.album.name);
             console.log("Preview song here: " + songInfo.album.external_urls.spotify);
+            console.log("=====================================");
         }
     });
 }
@@ -55,10 +58,12 @@ function concertThis() {
             console.log("Error occurred");
         } else {
             let concertInfo = JSON.parse(body);
-            // console.log(concertInfo);
+            let date = moment(concertInfo[0].datetime).format("MM-DD-YYYY");
+            console.log("===== Ok! Here are your results. ======");
             console.log("Venue: " + concertInfo[0].venue.name);
             console.log("Location: " + concertInfo[0].venue.city);
-            console.log("Date: " + concertInfo[0].datetime);
+            console.log("Date: " + date);
+            console.log("=======================================");
         }
     })
 }
@@ -83,6 +88,18 @@ function movieThis() {
             console.log("Languages: " + movieInfo.Language);
             console.log("Plot: " + movieInfo.Plot);
             console.log("Actors: " + movieInfo.Actors);
+        }
+    })
+}
+
+function justDoIt() {
+    fs.readFile("random.txt", "utf-8", function(err, data){
+        if (err) {
+            console.log("Error occured");
+        } else {
+            let txt = data.split(",");
+            let userInput = txt[1];
+            spotifyThis(userInput);
         }
     })
 }
