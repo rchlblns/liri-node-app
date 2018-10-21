@@ -26,14 +26,14 @@ switch(command) {
     break;
 }
 
-function spotifyThis() {
+function spotifyThis(song) {
 
-    if ( userInput === undefined) {
-        userInput = "Better Give U Up";
+    if (!song) {
+        song = "Better Give U Up";
     }
 
     var spotify = new Spotify(keys.spotify);
-    spotify.search ({ type: "track", query: userInput, limit: 1 }, function (err, data) {
+    spotify.search ({ type: "track", query: song, limit: 1 }, function (err, data) {
         
         if (err) {
             console.log("Error occured");
