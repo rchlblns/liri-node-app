@@ -8,44 +8,48 @@ let moment = require("moment");
 let command = process.argv[2];
 let userInput = process.argv[3];
 
-switch(command) {
+switch (command) {
     case "spotify-this-song":
-    spotifyThis();
-    break;
+        spotifyThis(userInput);
+        break;
 
     case "concert-this":
-    concertThis();
-    break;
+        concertThis();
+        break;
 
     case "movie-this":
-    movieThis();
-    break
+        movieThis();
+        break
 
     case "do-what-it-says":
-    justDoIt();
-    break;
+        justDoIt();
+        break;
 }
 
-function spotifyThis(song) {
+function spotifyThis(userInput) {
 
-    if (!song) {
-        song = "Better Give U Up";
+    if (!userInput) {
+        userInput = "Better Give U Up";
     }
 
     var spotify = new Spotify(keys.spotify);
-    spotify.search ({ type: "track", query: song, limit: 1 }, function (err, data) {
-        
+    spotify.search({ type: "track", query: userInput, limit: 1 }, function(err, data) {
+
         if (err) {
-            console.log("Error occured");
-        
+            throw err;
+
         } else {
             let songInfo = data.tracks.items[0];
-            console.log("===== Ok! This is what I found. =====");
+            console.log("");
+            console.log("===== Here is your song information =====");
+            console.log("");
             console.log("Song: " + songInfo.name);
             console.log("Artist: " + songInfo.album.artists[0].name);
-            console.log("Album: " +songInfo.album.name);
+            console.log("Album: " + songInfo.album.name);
             console.log("Preview song here: " + songInfo.album.external_urls.spotify);
-            console.log("=====================================");
+            console.log("");
+            console.log("=========================================");
+            console.log("");
         }
     });
 }
@@ -55,15 +59,21 @@ function concertThis() {
 
     request(concertQuery, function(err, response, body) {
         if (err) {
-            console.log("Error occurred");
+            throw err;
+            // } else if (body = undefined) {
+            //     console.log("Sorry! No concert info found.");
         } else {
             let concertInfo = JSON.parse(body);
             let date = moment(concertInfo[0].datetime).format("MM-DD-YYYY");
-            console.log("===== Ok! Here are your results. ======");
+            console.log("");
+            console.log("===== Here is your concert information ======");
+            console.log("");
             console.log("Venue: " + concertInfo[0].venue.name);
             console.log("Location: " + concertInfo[0].venue.city);
             console.log("Date: " + date);
-            console.log("=======================================");
+            console.log("");
+            console.log("=============================================");
+            console.log("");
         }
     })
 }
@@ -75,11 +85,14 @@ function movieThis() {
     }
     var omdb = "http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy"
 
-    request(omdb, function(err, response, body){
+    request(omdb, function(err, response, body) {
         if (err) {
-            console.log("Error occurred");
+            throw err;
         } else {
             let movieInfo = JSON.parse(body);
+            console.log("");
+            console.log("===== Here are your movie results =====")
+            console.log("");
             console.log("Title: " + movieInfo.Title);
             console.log("Release Year: " + movieInfo.Year);
             console.log("IMDB Rating: " + movieInfo.imdbRating);
@@ -88,18 +101,22 @@ function movieThis() {
             console.log("Languages: " + movieInfo.Language);
             console.log("Plot: " + movieInfo.Plot);
             console.log("Actors: " + movieInfo.Actors);
+            console.log("");
+            console.log("=======================================")
+            console.log("");
         }
     })
 }
 
 function justDoIt() {
-    fs.readFile("random.txt", "utf-8", function(err, data){
+    fs.readFile("random.txt", "utf-8", function(err, data) {
         if (err) {
-            console.log("Error occured");
+            throw err;
         } else {
+            // console.log(data)
             let txt = data.split(",");
-            let userInput = txt[1];
-            spotifyThis(userInput);
+            let dataToRead = txt[1];
+            spotifyThis(dataToRead);
         }
     })
 }
